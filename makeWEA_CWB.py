@@ -31,8 +31,8 @@ def findIndex(inputList,term):
 counter = 0
 yearOld = 1970
 
-csvwrite = open("TARI.csv","w",newline='') 
-writer = csv.writer(csvwrite, delimiter=',')
+csvwrite = open("TARI.wea","w",newline='') 
+writer = csv.writer(csvwrite, quoting=csv.QUOTE_NONNUMERIC, delimiter=' ')
 header = ["JDAY", "DATE", "SRAD","TMAX", "TMIN", "RAIN", "WIND", "RH"]
 writer.writerow(header)
 
@@ -54,7 +54,8 @@ with open( CWBfilename,newline='') as batchfile:
         datestr = row[indexDate]
         date = datetime.strptime(datestr,"%Y-%m-%d")
         datestr = date.strftime("%m/%d/%Y")
-        datestr = "'%s'"%datestr
+        datestr = "%s"%datestr
+        #datestr = f"{datestr}"
         doy = date.timetuple().tm_yday
         loc = doy - 1
         year = date.year
@@ -97,9 +98,13 @@ with open( CWBfilename,newline='') as batchfile:
             srad = float(row[indexSrad])
         else:
             srad = srad_lst[loc]
+        #srad = round(srad,2)
+        srad = float("{:.3f}".format(srad))
+        #srad = "{:.2f}".format(srad)
+        #srad = format(srad, ".2f")
         
         # write table
-        toWrite = [doy,datestr,srad,tmax,tmin,rain,ws,rh]
+        toWrite = [doy, datestr, srad, tmax, tmin, rain, ws, rh]
         writer.writerow(toWrite)
         print(toWrite)
         
